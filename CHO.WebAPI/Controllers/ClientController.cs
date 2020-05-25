@@ -21,5 +21,16 @@ namespace CHO.WebAPI.Controllers
     {
       return Ok(dataArray);
     }
+
+    [HttpGet("{id}")]
+    public IActionResult GetClient(int id)
+    {
+      if (id > dataArray.Length || id <= 0)
+      {
+        return BadRequest("Böyle bir ID bulunamadı");
+      }
+
+      return Ok(dataArray[id - 1]);
+    }
   }
 }
