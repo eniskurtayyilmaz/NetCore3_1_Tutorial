@@ -65,5 +65,20 @@ namespace CHO.WebAPI.Controllers
 
       return CreatedAtRoute("GetClient", new { id = id }, model);
     }
+
+
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteClient(int id)
+    {
+      if (id > dataArray.Count || id <= 0)
+      {
+        return BadRequest("Böyle bir ID bulunamadı");
+      }
+
+      dataArray.RemoveAt(id - 1);
+
+      return Ok();
+    }
   }
 }
