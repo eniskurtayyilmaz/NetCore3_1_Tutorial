@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CHO.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CHO.WebAPI.Controllers
@@ -10,27 +12,40 @@ namespace CHO.WebAPI.Controllers
   [ApiController]
   public class ClientController : ControllerBase
   {
-    private static string[] dataArray = new string[4]
+    private static ArrayList dataArray = new ArrayList()
     {
       "Müşteri 1", "Müşteri 2", "Müşteri 3", "Müşteri 4"
     };
 
 
-    [HttpGet]
+    [HttpGet(Name = "GetClientList")]
     public IActionResult GetClientList()
     {
       return Ok(dataArray);
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = "GetClient")]
     public IActionResult GetClient(int id)
     {
-      if (id > dataArray.Length || id <= 0)
+      if (id > dataArray.Count || id <= 0)
       {
         return BadRequest("Böyle bir ID bulunamadı");
       }
 
       return Ok(dataArray[id - 1]);
+    }
+
+    [HttpPost(Name = "AddClient")]
+    public IActionResult AddClient([FromBody]AddClientRequestModel model)
+    {
+      if (!ModelState.IsValid)
+      {
+        return BadRequest(ModelState.Values);
+      }
+
+      dataArray.Add(model.ClientName);
+
+      return CreatedAtRoute("GetClient", new { id = dataArray.Count }, model);
     }
   }
 }
