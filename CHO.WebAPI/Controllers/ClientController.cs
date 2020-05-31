@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CHO.Business.Interfaces;
+using CHO.DTO;
 using CHO.WebAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +14,17 @@ namespace CHO.WebAPI.Controllers
   [ApiController]
   public class ClientController : ControllerBase
   {
+    private readonly IClientManager _clientManager;
+
     private static ArrayList dataArray = new ArrayList()
     {
       "Müşteri 1", "Müşteri 2", "Müşteri 3", "Müşteri 4"
     };
+
+    public ClientController(IClientManager clientManager)
+    {
+      _clientManager = clientManager;
+    }
 
 
     [HttpGet(Name = "GetClientList")]
@@ -38,12 +47,14 @@ namespace CHO.WebAPI.Controllers
     [HttpPost(Name = "AddClient")]
     public IActionResult AddClient([FromBody]AddClientRequestModel model)
     {
-      if (!ModelState.IsValid)
-      {
-        return BadRequest(ModelState.Values);
-      }
+      //  if (!ModelState.IsValid)
+      //  {
+      //    return BadRequest(ModelState.Values);
+      //  }
 
-      dataArray.Add(model.ClientName);
+      //  dataArray.Add(model.ClientName);
+
+      _clientManager.AddClient(new ClientAddRequestModelDTO() { ClientName = model.ClientName});
 
       return CreatedAtRoute("GetClient", new { id = dataArray.Count }, model);
     }
