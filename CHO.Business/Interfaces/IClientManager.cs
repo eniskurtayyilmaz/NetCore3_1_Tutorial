@@ -1,13 +1,15 @@
-﻿using CHO.DTO;
+﻿using System.Collections.Generic;
+using CHO.DTO;
+using CHO.DTO.Client.Response;
 
 namespace CHO.Business.Interfaces
 {
   public interface IClientManager
   {
-    void AddClient(ClientAddRequestModelDTO addRequestModelDto);
-    void UpdateClient(ClientUpdateRequestModelDTO updateRequestModelDto);
-    void GetClientById(ClientGetRequestModelDTO clientGetRequestModelDto);
-    void GetClientList();
-    void DeleteClientById(ClientDeleteRequestModelDTO clientDeleteRequestModelDto);
+    ClientGetResponseModelDTO AddClient(ClientAddRequestModelDTO addRequestModelDto);
+    ClientGetResponseModelDTO UpdateClient(ClientUpdateRequestModelDTO updateRequestModelDto);
+    ClientGetResponseModelDTO GetClientById(ClientGetRequestModelDTO clientGetRequestModelDto);
+    List<ClientGetResponseModelDTO> GetClientList();
+    ClientDeleteResponseModelDTO DeleteClientById(ClientDeleteRequestModelDTO clientDeleteRequestModelDto);
   }
 }
