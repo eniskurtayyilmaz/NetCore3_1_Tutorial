@@ -40,7 +40,11 @@ namespace CHO.Business.Concrete
 
     public ClientGetResponseModelDTO GetClientById(ClientGetRequestModelDTO clientGetRequestModelDto)
     {
-      throw new NotImplementedException();
+      return new ClientGetResponseModelDTO()
+      {
+        ClientId = clientGetRequestModelDto.ClientId - 1,
+        ClientName = dataArray[clientGetRequestModelDto.ClientId - 1].ToString()
+      };
     }
 
     public List<ClientGetResponseModelDTO> GetClientList()
