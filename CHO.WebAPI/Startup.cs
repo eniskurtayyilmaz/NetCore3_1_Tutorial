@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CHO.Business.Concrete;
 using CHO.Business.Interfaces;
+using CHO.Data.Concretes;
+using CHO.Data.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -21,19 +23,8 @@ namespace CHO.WebAPI
     {
       services.AddControllers();
 
-      //services.AddTransient<IClientManager, ClientService>();
-
-      //services.AddScoped<IClientManager, ClientService>();
-
-      services.AddSingleton<IClientManager, ClientService>();
-
-      var serviceProvider = services.BuildServiceProvider();
-
-      var service1 = serviceProvider.GetService<IClientManager>();
-      var service2 = serviceProvider.GetService<IClientManager>();
-
-      Console.WriteLine($"Nesne eþit mi? {service1 == service2}");
-
+      services.AddTransient<IClientManager, ClientService>();
+      services.AddSingleton<IClientRepository, ClientRepository>();
 
     }
 

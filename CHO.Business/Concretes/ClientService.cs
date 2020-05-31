@@ -4,19 +4,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using CHO.Business.Interfaces;
+using CHO.Data.Concretes;
+using CHO.Data.Interfaces;
 using CHO.DTO;
 using CHO.DTO.Client.Response;
+using CHO.Entity;
 
 namespace CHO.Business.Concrete
 {
   public class ClientService : IClientManager
   {
+    private readonly IClientRepository _clientRepository;
 
-    private static ArrayList dataArray = new ArrayList()
+    public ClientService(IClientRepository clientRepository)
     {
-      "Müşteri 1", "Müşteri 2", "Müşteri 3", "Müşteri 4"
-    };
+      _clientRepository = clientRepository;
+    }
 
+    //public ClientService()
+    //{
+    //  _clientRepository = new ClientRepository();
+    //}
 
     public ClientGetResponseModelDTO AddClient(ClientAddRequestModelDTO addRequestModelDto)
     {
@@ -25,11 +33,20 @@ namespace CHO.Business.Concrete
         return null;
       }
 
-      dataArray.Add(addRequestModelDto.ClientName);
+      var responseRepository = _clientRepository.AddClient(new Client()
+      {
+        ID = 0,
+        NAME = addRequestModelDto.ClientName,
+        EMAIL = "",
+        ISDELETED = false,
+      });
+
+     
+
       return new ClientGetResponseModelDTO()
       {
-        ClientId = dataArray.Count,
-        ClientName = addRequestModelDto.ClientName
+        ClientId = responseRepository.ID,
+        ClientName = responseRepository.NAME
       };
     }
 
@@ -40,10 +57,12 @@ namespace CHO.Business.Concrete
 
     public ClientGetResponseModelDTO GetClientById(ClientGetRequestModelDTO clientGetRequestModelDto)
     {
+      var responseRepository = _clientRepository.GetClientById(clientGetRequestModelDto.ClientId);
+
       return new ClientGetResponseModelDTO()
       {
-        ClientId = clientGetRequestModelDto.ClientId - 1,
-        ClientName = dataArray[clientGetRequestModelDto.ClientId - 1].ToString()
+        ClientId = responseRepository.ID,
+        ClientName = responseRepository.NAME
       };
     }
 
@@ -51,16 +70,11 @@ namespace CHO.Business.Concrete
     {
       List<ClientGetResponseModelDTO> response = new List<ClientGetResponseModelDTO>();
 
-      for (int i = 0; i < dataArray.Count; i++)
-      {
-        response.Add(new ClientGetResponseModelDTO()
-        {
-          ClientId = i + 1,
-          ClientName = dataArray[i].ToString(),
-        });
-      }
+      var responseRepository = _clientRepository.GetClientList();
 
-      return response;
+     
+
+      return responseRepository.Select(x=> new ClientGetResponseModelDTO() {ClientId = x.ID, ClientName = x.NAME}).ToList();
     }
 
     public ClientDeleteResponseModelDTO DeleteClientById(ClientDeleteRequestModelDTO clientDeleteRequestModelDto)
