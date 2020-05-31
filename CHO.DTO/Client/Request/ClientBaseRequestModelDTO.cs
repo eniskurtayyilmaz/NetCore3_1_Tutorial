@@ -2,7 +2,7 @@
 
 namespace CHO.DTO
 {
-  public abstract class ClientBaseRequetModelDTO
+  public abstract class ClientBaseRequestModelDTO
   {
     public int ClientId { get; set; }
   }
